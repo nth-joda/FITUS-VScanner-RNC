@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Button,
-  ImageBackground,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import TextRecognition from 'react-native-text-recognition';
 // import {SafeAreaInsetsContext} from 'react-native-safe-area-context';
@@ -55,7 +47,8 @@ export default function PreviewScreen({route, navigation}) {
         </View>
         <View style={styles.cta}>
           <View style={styles.button}>
-            <TouchableOpacity onPress={() => alert('on developing')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TextDetection', text)}>
               <Text style={{textAlign: 'center', color: 'white'}}>
                 Trích xuất thông tin
               </Text>
