@@ -14,25 +14,44 @@ import {Entypo} from '@expo/vector-icons';
 import {Camera, CameraType} from 'expo-camera';
 import {useIsFocused} from '@react-navigation/native';
 // import RNMlKit from "react-native-firebase-mlkit";
-
+import ImagePicker from 'react-native-image-crop-picker';
 export default function TakePhotoScreen({navigation}) {
   const isFocused = useIsFocused();
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  const __takePicture = async () => {
-    if (cameraRef) {
-      let photo = await cameraRef.takePictureAsync();
-      console.log('photo', photo);
-      navigation.navigate('Preview', photo);
-    }
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      cropping: true,
+      freeStyleCropEnabled: true,
+      cropperToolbarTitle: 'Chỉnh sửa ảnh hóa đơn ngay thẳng',
+      hideBottomControls: true,
+    })
+      .then(image => {
+        console.log('shot image:', image);
+        navigation.navigate('Preview', image);
+      })
+      .catch(err => {
+        navigation.navigate('Home');
+      });
   };
+  // const __takePicture = async () => {
+  //   if (cameraRef) {
+  //     let photo = await cameraRef.takePictureAsync();
+  //     console.log('photo', photo);
+  //     navigation.navigate('Preview', photo);
+  //   }
+  // };
   const [type, setType] = useState(CameraType.back);
   useEffect(() => {
     (async () => {
       const {status} = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
-  }, []);
+    if (isFocused) {
+      openCamera();
+    }
+  }, [isFocused]);
+
   if (hasPermission === null) {
     return <View />;
   }
@@ -121,11 +140,11 @@ export default function TakePhotoScreen({navigation}) {
 
   return (
     <SafeAreaView style={styles.TakePhotoScreen}>
-      <View style={styles.CameraArea}>
+      {/* <View style={styles.CameraArea}>
         <View style={styles.CameraTop}>
           <View></View>
-        </View>
-        <View style={styles.CameraCenter}>
+        </View> */}
+      {/* <View style={styles.CameraCenter}>
           {isFocused && (
             <Camera
               style={styles.camera}
@@ -139,8 +158,8 @@ export default function TakePhotoScreen({navigation}) {
                   flex: 1,
                   backgroundColor: 'transparent',
                   justifyContent: 'flex-end',
-                }}>
-                {/* <TouchableOpacity
+                }}> */}
+      {/* <TouchableOpacity
                   style={{
                     flex: 0.1,
                     alignSelf: "flex-end",
@@ -159,11 +178,11 @@ export default function TakePhotoScreen({navigation}) {
                     Flip
                   </Text>
                 </TouchableOpacity> */}
-              </View>
+      {/* </View>
             </Camera>
           )}
-        </View>
-        <View style={styles.CameraBottom}>
+        </View> */}
+      {/* <View style={styles.CameraBottom}>
           <Text style={styles.GuideText}>
             Giữ hóa đơn thẳng và chụp nơi có ánh sáng tốt
           </Text>
@@ -186,7 +205,7 @@ export default function TakePhotoScreen({navigation}) {
             <Entypo name="camera" size={32} color="#025395" />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }

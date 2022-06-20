@@ -6,30 +6,33 @@ import TextRecognition from 'react-native-text-recognition';
 export default function PreviewScreen({route, navigation}) {
   const [isVisible, setIsVisible] = useState(false);
   const [text, setText] = useState('');
+  const [isOcring, setIsOcring] = useState(false);
   const onToggleModal = () => {
     setIsVisible(!isVisible);
   };
   /* 2. Get the param */
   const photo = route.params;
-  console.log(photo.uri);
+  console.log('photo', photo.path);
   useEffect(() => {
     (async () => {
-      const result = await TextRecognition.recognize(photo.uri);
+      setIsOcring(true);
+      const result = await TextRecognition.recognize(photo.path);
       console.log(result);
       setText(result);
+      setIsOcring(false);
     })();
   }, []);
 
   return (
     <View style={styles.preview}>
       <View style={styles.photo}>
-        {photo.uri ? (
+        {photo.path ? (
           <Image
             style={{
               flex: 1,
               resizeMode: 'center',
             }}
-            source={{uri: photo.uri}}
+            source={{uri: photo.path}}
           />
         ) : (
           <Text>no photo</Text>
@@ -50,13 +53,10 @@ export default function PreviewScreen({route, navigation}) {
             <TouchableOpacity
               onPress={() => navigation.navigate('TextDetection', text)}>
               <Text style={{textAlign: 'center', color: 'white'}}>
-                Trích xuất thông tin
+                Tiếp tục
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
-        <View style={{flex: 1}}>
-          <Text>{text ? <Text>{text}</Text> : <Text>Empty</Text>}</Text>
         </View>
       </View>
     </View>
