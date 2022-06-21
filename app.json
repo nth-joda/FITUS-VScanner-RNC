@@ -1,4 +1,7 @@
 {
   "name": "vscannerRNC",
-  "displayName": "vscannerRNC"
+  "android": {
+    "package": "com.nthaufitus.vscannerrnc",
+    "updates.url": "https://exp.host/@nthaufitus/vscannerrnc"
+  }
 }
